@@ -11,6 +11,7 @@ repositories {
 }
 
 dependencies {
+    implementation("io.github.java-native:jssc:2.9.4")
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
 }
 
