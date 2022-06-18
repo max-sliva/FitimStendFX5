@@ -5,7 +5,6 @@ import javafx.scene.web.WebEngine
 import javafx.scene.web.WebView
 import java.io.File
 import java.net.URL
-import org.json.JSONArray
 import org.json.JSONObject
 
 class WebController {
@@ -19,14 +18,13 @@ class WebController {
 //        val file = File(String(getClass().getResource("RateCalculatorHelp.html")))
         webView.getEngine().loadContent("<html>hello, world</html>", "text/html");
         var engine = WebEngine()
-        val url: URL = this.javaClass.getResource("HTML/index1.html")
+//        val url: URL = this.javaClass.getResource("HTML/index1.html")
         val url2: URL = this.javaClass.getResource("HTML/floppy8.html")
         webView.zoom = 1.5
         engine = webView.getEngine()
         engine.javaScriptEnabledProperty().set(true)
         engine.load(url2.toString())
         println("js = ${engine.isJavaScriptEnabled}")
-//        configureArduinoConnect(engine, pagesNumbersMap)
         println("Controller working")
         button1.setOnAction { //обработчик нажатия кнопки
             println("Button clicked!")
@@ -36,9 +34,23 @@ class WebController {
         }
         val htmlData = fromFileToJSON()
         println("htmlData = $htmlData")
-        val htmlFiles = htmlData.get("htmlFiles")
-        println("htmlFiles = $htmlFiles")
-//        htmlFiles.
+//        val htmlFiles = htmlData.get("htmlFiles")
+//        println("htmlFiles = $htmlFiles")
+//        val htmlFilesJSONArray = JSONArray(htmlFiles)
+        val htmlFilesJSONArray = htmlData.getJSONArray("htmlFiles")
+//        val htmlArray = JSONArray.decodeFromString<List<PageFile>>(htmlFilesJSONArray)
+        for (i in 0 until htmlFilesJSONArray.length()) {
+            val htmlFile = htmlFilesJSONArray.getJSONObject(i)
+            println("html = ${htmlFile.get("html")} name =  ${htmlFile.get("name")}")
+            val buton = Button(htmlFile.get("name").toString())
+            flowPaneWithButtons.children.add(buton)
+            buton.setOnMouseClicked {
+                val url: URL = this.javaClass.getResource("HTML/${htmlFile.get("html")}")
+                engine.load(url.toString())
+            }
+        }
+//        configureArduinoConnect(engine, pagesNumbersMap)
+        configureArduinoConnect(engine, htmlFilesJSONArray)
     }
 
     //todo сделать загрузку объектов из settings.json в 2 хешмапа

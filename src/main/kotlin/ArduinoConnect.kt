@@ -2,10 +2,11 @@ import javafx.application.Platform
 import javafx.scene.web.WebEngine
 import jssc.SerialPort
 import jssc.SerialPortList
-import java.net.URL
-import kotlin.system.exitProcess
+import org.json.JSONArray
+import org.json.JSONObject
 
-fun configureArduinoConnect(engine: WebEngine, pagesNumbersMap: Map<String, String>) {
+//fun configureArduinoConnect(engine: WebEngine, pagesNumbersMap: Map<String, String>) {
+fun configureArduinoConnect(engine: WebEngine, htmlFilesJSONArray: JSONArray) {
     var serialPort: SerialPort?
     for (port in SerialPortList.getPortNames()) {
         println(port)
@@ -19,9 +20,14 @@ fun configureArduinoConnect(engine: WebEngine, pagesNumbersMap: Map<String, Stri
                 str = str.trim();
                 println(str) //выводим принятую строку
                 Platform.runLater{
-                    val url: URL = Main.javaClass.getResource(pagesNumbersMap.get(str))
+//                    val url: URL = Main.javaClass.getResource(pagesNumbersMap.get(str))
+                    val htmlFile = htmlFilesJSONArray.first {
+                        (it as JSONObject).get("number")==str
+                    } as JSONObject
+                    val url = Main.javaClass.getResource("HTML/${htmlFile.get("html")}")
+                    println("htmlFile = $htmlFile")
+                    println("file = $url")
                     engine.load(url.toString())
-
                 }
             }
         }

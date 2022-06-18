@@ -1,3 +1,3 @@
 import java.net.URL
 
-data class PageFile(var name: String , var file: URL)
+data class PageFile(var number: Int, var html: URL, var name: String): java.io.Serializable
