@@ -34,12 +34,20 @@ class WebController {
            // engine.executeScript("includeHTML()");
 //            engine.executeScript("clickFunc()")
         }
+        val htmlData = fromFileToJSON()
+        println("htmlData = $htmlData")
+        val htmlFiles = htmlData.get("htmlFiles")
+        println("htmlFiles = $htmlFiles")
+//        htmlFiles.
     }
 
     //todo сделать загрузку объектов из settings.json в 2 хешмапа
-    fun fromFileToJSON(dataName: String): JSONObject { //метод для чтения из файла в json-объект
-        val str =  File("settings.json").readText(Charsets.UTF_8)
-        // println("file data = $str")
+    fun fromFileToJSON(): JSONObject { //метод для чтения из файла в json-объект
+        val settingsURL = this.javaClass.getResource("HTML/settings.json")
+        println("settingsURL = $settingsURL")
+//        val str = "{'data': 111}"
+        val str =  File(settingsURL.file).readText(Charsets.UTF_8)
+        println("file data = $str")
         return JSONObject(str)
     }
 }
